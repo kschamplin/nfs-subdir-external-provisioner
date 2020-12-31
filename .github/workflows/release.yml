@@ -2,6 +2,8 @@ name: ci
 
 on:
   push:
+    branches:
+      - master
     tags:
       - 'gh-v*.*.*'
 
@@ -52,7 +54,6 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v1
         with:
-          registry: quay.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_TOKEN }}
       -
@@ -64,7 +65,7 @@ jobs:
           file: ./Dockerfile.multiarch
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.prep.outputs.tags }}
+          tags: supauser/nfs-subdir-external-provisioner:latest
           build-args: |
             APP_FOLDER=/go/src/github.com/${{ github.repository }}
           labels: |
